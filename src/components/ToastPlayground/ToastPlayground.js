@@ -1,27 +1,19 @@
 import React from "react";
 
 import Button from "../Button";
-import Toast from "../Toast/Toast";
+import ToastShelf from "../ToastShelf/ToastShelf";
 
 import styles from "./ToastPlayground.module.css";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 const defaultVariant = VARIANT_OPTIONS[0];
+export const ToastsContext = React.createContext();
 
 function ToastPlayground() {
     const [message, setMessage] = React.useState("");
     const [variant, setVariant] = React.useState(defaultVariant);
-    const [isSubmitted, setIsSubmitted] = React.useState(false);
+    const [toasts,setToasts] = React.useState([]);
 
-    // React.useEffect(() => {
-    //     console.log("message", message);
-    //     console.log("variant", variant);
-    // }, [message, variant]);
-
-    function ToastWrapper({ message, variant, isSubmitted }) {
-
-        if (isSubmitted) return <Toast message={message} variant={variant} />;
-    }
 
     return (
         <div className={styles.wrapper}>
@@ -29,7 +21,9 @@ function ToastPlayground() {
                 <img alt="Cute toast mascot" src="/toast.png" />
                 <h1>Toast Playground</h1>
             </header>
-            <ToastWrapper message={message} variant={variant} isSubmitted={isSubmitted}/>
+            <ToastsContext.Provider value={[toasts,setToasts]}>
+                <ToastShelf toasts={toasts}/>
+            </ToastsContext.Provider>
             <div className={styles.controlsWrapper}>
                 <div className={styles.row}>
                     <label
@@ -51,8 +45,15 @@ function ToastPlayground() {
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-                        console.log(message, variant);
-                        setIsSubmitted(true);
+                        const newToasts = [...toasts,{
+                            key:Math.random(),
+                            message,
+                            variant,
+                        }];
+                        setToasts(newToasts);
+                        console.log('toasts',newToasts);
+                        setMessage('');
+                        setVariant(defaultVariant);
                     }}
                 >
                     <div className={styles.row}>
