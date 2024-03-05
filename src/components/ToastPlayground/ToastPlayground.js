@@ -2,18 +2,19 @@ import React from "react";
 
 import Button from "../Button";
 import ToastShelf from "../ToastShelf/ToastShelf";
-
+import {ToastsContext} from "../ToastProvider/ToastProvider";
+import useEscapeKey from "../../hooks/useEscapeKey";
 import styles from "./ToastPlayground.module.css";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 const defaultVariant = VARIANT_OPTIONS[0];
-export const ToastsContext = React.createContext();
 
 function ToastPlayground() {
     const [message, setMessage] = React.useState("");
     const [variant, setVariant] = React.useState(defaultVariant);
-    const [toasts,setToasts] = React.useState([]);
-
+    const [toasts,setToasts] = React.useContext(ToastsContext);
+    
+    useEscapeKey();
 
     return (
         <div className={styles.wrapper}>
@@ -21,9 +22,7 @@ function ToastPlayground() {
                 <img alt="Cute toast mascot" src="/toast.png" />
                 <h1>Toast Playground</h1>
             </header>
-            <ToastsContext.Provider value={[toasts,setToasts]}>
-                <ToastShelf toasts={toasts}/>
-            </ToastsContext.Provider>
+            <ToastShelf />
             <div className={styles.controlsWrapper}>
                 <div className={styles.row}>
                     <label
