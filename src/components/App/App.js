@@ -3,7 +3,6 @@ import Footer from '../Footer';
 
 import ToastPlayground from '../ToastPlayground';
 import ToastProvider from "../ToastProvider/ToastProvider";
-import { ToastsContext } from '../ToastProvider/ToastProvider';
 
 function App() {
   return (

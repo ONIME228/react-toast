@@ -1,13 +1,11 @@
 import React from 'react';
-import { ToastsContext } from '../components/ToastProvider/ToastProvider';
 
-function useEscapeKey() {
-    const [toasts,setToasts] = React.useContext(ToastsContext);
+function useEscapeKey(callback) {
 
     React.useEffect(()=>{
         const clearToastsOnEsc = (e)=> {
             if (e.code === "Escape") {
-                setToasts([]);
+                callback();
             }
         };
         document.addEventListener('keydown',clearToastsOnEsc);

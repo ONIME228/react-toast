@@ -3,7 +3,6 @@ import React from "react";
 import Button from "../Button";
 import ToastShelf from "../ToastShelf/ToastShelf";
 import {ToastsContext} from "../ToastProvider/ToastProvider";
-import useEscapeKey from "../../hooks/useEscapeKey";
 import styles from "./ToastPlayground.module.css";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
@@ -12,9 +11,14 @@ const defaultVariant = VARIANT_OPTIONS[0];
 function ToastPlayground() {
     const [message, setMessage] = React.useState("");
     const [variant, setVariant] = React.useState(defaultVariant);
-    const [toasts,setToasts] = React.useContext(ToastsContext);
-    
-    useEscapeKey();
+    const {addToast} = React.useContext(ToastsContext);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        addToast({message,variant});
+        setMessage('');
+        setVariant(defaultVariant);
+    };
 
     return (
         <div className={styles.wrapper}>
@@ -41,20 +45,7 @@ function ToastPlayground() {
                         />
                     </div>
                 </div>
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        const newToasts = [...toasts,{
-                            key:Math.random(),
-                            message,
-                            variant,
-                        }];
-                        setToasts(newToasts);
-                        console.log('toasts',newToasts);
-                        setMessage('');
-                        setVariant(defaultVariant);
-                    }}
-                >
+                <form onSubmit={handleSubmit}>
                     <div className={styles.row}>
                         <div className={styles.label}>Variant</div>
                         <div

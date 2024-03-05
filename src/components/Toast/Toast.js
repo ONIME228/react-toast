@@ -21,11 +21,10 @@ const ICONS_BY_VARIANT = {
 
 function Toast({children,variant='notice', id}) {
   const Icon = ICONS_BY_VARIANT[variant];
-  const [toasts,setToasts] = React.useContext(ToastsContext);
+  const {dismissToast} = React.useContext(ToastsContext);
   const closeHandle = (e) => {
     if (e.type === 'click' || e?.code === 'Enter') {
-      const newToasts = toasts.filter(toast=>toast.key !== id);
-      setToasts(newToasts);
+      dismissToast(id);
     }
   }
   return (
@@ -34,9 +33,9 @@ function Toast({children,variant='notice', id}) {
         <Icon size={24} />
       </div>
       <p className={styles.content}>
-      <span className="VisuallyHidden_wrapper">
+      <VisuallyHidden>
           {variant}
-      </span>
+      </VisuallyHidden>
         {children}
       </p>
       <button 
